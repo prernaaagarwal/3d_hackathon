@@ -91,10 +91,13 @@ CREATE TABLE tours (
   scene_url TEXT,                        -- URL to .splat file
   thumbnail_url TEXT,
   status TEXT DEFAULT 'queued' CHECK (status IN ('queued', 'processing', 'complete', 'failed')),
-  world_api_job_id TEXT,                 -- World Labs API job reference
+  world_api_job_id TEXT,                 -- World Labs operation_id for polling
+  world_id TEXT,                         -- World Labs world_id (set on completion)
   quality TEXT DEFAULT 'standard' CHECK (quality IN ('standard', 'high')),
+  photo_urls TEXT[] DEFAULT '{}',        -- Source image URLs used for 3D generation
   photo_count INTEGER DEFAULT 0,
   processing_time_ms INTEGER,
+  error_message TEXT,                    -- Error details if generation fails
   is_public BOOLEAN DEFAULT FALSE,
   share_password TEXT,                   -- Optional password for private tours
   created_at TIMESTAMPTZ DEFAULT NOW(),
