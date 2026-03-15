@@ -120,6 +120,52 @@ export const worldApiService = {
   },
 
   /**
+   * Fetch world assets (spz URLs, thumbnail, etc.) from World Labs API.
+   * Used by the self-hosted 3D viewer to load .spz files.
+   */
+  async getWorldAssets(worldId: string): Promise<{
+    spzUrls: { full_res?: string; '500k'?: string; '100k'?: string };
+    thumbnailUrl?: string;
+    caption?: string;
+    marbleUrl?: string;
+  }> {
+    try {
+      const response = await fetch(`${WORLD_API_BASE}/worlds/${worldId}`, {
+        headers: {
+          'WLT-Api-Key': env.WORLD_LABS_API_KEY,
+        },
+      });
+
+      if (!response.ok) {
+        const errorBody = await response.text();
+        throw new Error(`World Labs API error: ${response.status} - ${errorBody}`);
+      }
+
+      const data = await response.json() as {
+        world_marble_url?: string;
+        assets?: {
+          caption?: string;
+          thumbnail_url?: string;
+          splats?: {
+            spz_urls?: { full_res?: string; '500k'?: string; '100k'?: string };
+          };
+        };
+      };
+
+      return {
+        spzUrls: data.assets?.splats?.spz_urls ?? {},
+        thumbnailUrl: data.assets?.thumbnail_url,
+        caption: data.assets?.caption,
+        marbleUrl: data.world_marble_url,
+      };
+    } catch (error) {
+      if (error instanceof AppError) throw error;
+      logger.error('World Labs get world assets failed', { error: String(error), worldId });
+      throw new AppError('Failed to fetch 3D world assets', 500, 'WORLD_API_ERROR');
+    }
+  },
+
+  /**
    * Poll World Labs operation status.
    * When done=true, response contains the generated world data.
    */

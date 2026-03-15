@@ -21,6 +21,7 @@ import { developerRoutes } from './routes/developer.routes';
 import { tourService } from './services/tour.service';
 import { roiService } from './services/roi.service';
 import { aiService } from './services/ai.service';
+import { worldApiService } from './services/worldApi.service';
 
 const app = express();
 
@@ -52,6 +53,21 @@ app.get('/api/tours/public/:id', async (req, res, next) => {
   try {
     const tour = await tourService.getPublicTour(req.params.id);
     res.json({ data: tour });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Public world assets endpoint (fetches .spz URLs for the 3D viewer)
+app.get('/api/tours/public/:id/assets', async (req, res, next) => {
+  try {
+    const tour = await tourService.getPublicTour(req.params.id);
+    if (!tour.world_id) {
+      res.status(404).json({ error: '3D world not available for this tour', code: 'NO_WORLD' });
+      return;
+    }
+    const assets = await worldApiService.getWorldAssets(tour.world_id);
+    res.json({ data: assets });
   } catch (error) {
     next(error);
   }

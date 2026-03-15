@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "motion/react";
 import {
@@ -17,6 +17,14 @@ import {
 import type { RoiInput, RoiResult } from "@/lib/types";
 
 export default function RoiWizardPage() {
+  return (
+    <Suspense fallback={<div className="flex h-screen items-center justify-center bg-navy-950"><div className="mx-auto h-12 w-12 animate-spin rounded-full border-2 border-gold-500 border-t-transparent" /></div>}>
+      <RoiWizardContent />
+    </Suspense>
+  );
+}
+
+function RoiWizardContent() {
   const searchParams = useSearchParams();
 
   // Property context from query params (when linked from a property card)
@@ -357,7 +365,7 @@ export default function RoiWizardPage() {
                         <YAxis stroke="rgba(234,234,234,0.3)" fontSize={12} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
                         <Tooltip
                           contentStyle={{ backgroundColor: "#0A1628", border: "1px solid rgba(201,168,76,0.2)", borderRadius: "12px", color: "#F5F5F5" }}
-                          formatter={(value: number) => [formatCurrency(value), ""]}
+                          formatter={(value) => [formatCurrency(Number(value)), ""]}
                           labelFormatter={(label) => `Year ${label}`}
                         />
                         <Legend />
@@ -382,7 +390,7 @@ export default function RoiWizardPage() {
                         <YAxis stroke="rgba(234,234,234,0.3)" fontSize={12} tickFormatter={(v) => `${(v / 1000000).toFixed(1)}M`} />
                         <Tooltip
                           contentStyle={{ backgroundColor: "#0A1628", border: "1px solid rgba(201,168,76,0.2)", borderRadius: "12px", color: "#F5F5F5" }}
-                          formatter={(value: number) => [formatCurrency(value), ""]}
+                          formatter={(value) => [formatCurrency(Number(value)), ""]}
                           labelFormatter={(label) => `Year ${label}`}
                         />
                         <Legend />

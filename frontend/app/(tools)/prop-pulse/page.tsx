@@ -178,7 +178,7 @@ export default function PropPulsePage() {
                     <YAxis stroke="rgba(234,234,234,0.3)" fontSize={12} tickFormatter={(v) => `${v}`} />
                     <Tooltip
                       contentStyle={{ backgroundColor: "#0A1628", border: "1px solid rgba(201,168,76,0.2)", borderRadius: "12px", color: "#F5F5F5" }}
-                      formatter={(value: number) => [`AED ${formatNumber(value)}/sqft`, "Avg Price"]}
+                      formatter={(value) => [`AED ${formatNumber(Number(value))}/sqft`, "Avg Price"]}
                     />
                     <Bar dataKey="avg_price_per_sqft" fill="#C9A84C" radius={[4, 4, 0, 0]} />
                   </BarChart>

@@ -179,14 +179,22 @@ export default function TourViewerPage() {
 
             {/* Action Buttons */}
             <div className="space-y-3 pt-2">
+              {tour.status === "complete" && tour.world_id && (
+                <Link
+                  href={`/viewer/${tourId}`}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold-500 to-gold-400 px-4 py-3.5 text-sm font-semibold text-navy-950 hover:from-gold-400 hover:to-gold-300 transition-all"
+                >
+                  <Globe className="h-4 w-4" /> Open 3D Viewer & Record Tour
+                </Link>
+              )}
               {marbleUrl && (
                 <a
                   href={marbleUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-gold-500 to-gold-400 px-4 py-3.5 text-sm font-semibold text-navy-950 hover:from-gold-400 hover:to-gold-300 transition-all"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl border border-gold-500/20 px-4 py-3.5 text-sm font-semibold text-gold-400 hover:bg-gold-500/10 transition-all"
                 >
-                  <ExternalLink className="h-4 w-4" /> Open Full Screen 3D Tour
+                  <ExternalLink className="h-4 w-4" /> Open Marble Viewer
                 </a>
               )}
               <a
