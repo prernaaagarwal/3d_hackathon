@@ -48,7 +48,8 @@ ${property.annualRentAed ? `Annual Rent: AED ${property.annualRentAed.toLocaleSt
         config: {
           systemInstruction: `You are a luxury Dubai real estate copywriter. Write a compelling 150-250 word property description. Be specific to the area and property type. Highlight key selling points (location, views, finishes, lifestyle, investment potential). Tone: confident, aspirational, professional. Do not use generic filler. Every sentence must add value. Do not include the price or address — those are shown separately in the UI.`,
           temperature: 0.8,
-          maxOutputTokens: 512,
+          maxOutputTokens: 1024,
+          thinkingConfig: { thinkingBudget: 0 },
         },
       });
 
@@ -78,7 +79,8 @@ Has Mortgage: ${roi.hasMortgage ? 'Yes' : 'No'}`,
         config: {
           systemInstruction: `You are a Dubai real estate investment analyst. Write a 2-3 paragraph (100-200 words) objective investment summary for a non-technical investor. Include: whether yield is competitive for the area, cashflow timeline, key risk factors (vacancy, rate sensitivity), and overall investment quality. Tone: data-driven and objective like an analyst briefing — not salesy. Use specific numbers from the data provided.`,
           temperature: 0.6,
-          maxOutputTokens: 512,
+          maxOutputTokens: 1024,
+          thinkingConfig: { thinkingBudget: 0 },
         },
       });
 
@@ -109,7 +111,8 @@ Provide a structured report covering:
         config: {
           systemInstruction: `You are a senior real estate investment analyst at a top-tier consultancy. Generate a structured, institutional-grade developer due diligence report. Use formal, analytical language. Every claim must reference the provided data. Include a clear Buy/Hold/Caution recommendation. Format with clear headers and bullet points. Be objective — highlight both strengths and risks.`,
           temperature: 0.5,
-          maxOutputTokens: 1500,
+          maxOutputTokens: 2048,
+          thinkingConfig: { thinkingBudget: 0 },
         },
       });
 

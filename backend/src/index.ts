@@ -19,6 +19,9 @@ import { uploadRoutes } from './routes/upload.routes';
 import { aiRoutes } from './routes/ai.routes';
 import { developerRoutes } from './routes/developer.routes';
 import { tourService } from './services/tour.service';
+import { roiService } from './services/roi.service';
+import { aiService } from './services/ai.service';
+import { worldApiService } from './services/worldApi.service';
 
 const app = express();
 
@@ -50,6 +53,46 @@ app.get('/api/tours/public/:id', async (req, res, next) => {
   try {
     const tour = await tourService.getPublicTour(req.params.id);
     res.json({ data: tour });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Public world assets endpoint (fetches .spz URLs for the 3D viewer)
+app.get('/api/tours/public/:id/assets', async (req, res, next) => {
+  try {
+    const tour = await tourService.getPublicTour(req.params.id);
+    if (!tour.world_id) {
+      res.status(404).json({ error: '3D world not available for this tour', code: 'NO_WORLD' });
+      return;
+    }
+    const assets = await worldApiService.getWorldAssets(tour.world_id);
+    res.json({ data: assets });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Public ROI calculator (pure computation, no auth needed)
+app.post('/api/roi/calculate', express.json(), async (req, res, next) => {
+  try {
+    const result = roiService.calculate(req.body);
+    res.json({ data: result });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Public AI ROI narrative (accessible from public ROI Wizard)
+app.post('/api/ai/roi-narrative', express.json(), async (req, res, next) => {
+  try {
+    const { area, purchasePrice, annualRent } = req.body;
+    if (!area || !purchasePrice || !annualRent) {
+      res.status(400).json({ error: 'Missing required fields: area, purchasePrice, annualRent', code: 'VALIDATION_ERROR' });
+      return;
+    }
+    const narrative = await aiService.generateRoiNarrative(req.body);
+    res.json({ data: { narrative } });
   } catch (error) {
     next(error);
   }

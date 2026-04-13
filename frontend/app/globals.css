@@ -1,26 +1,89 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* === Dubai Luxury Color Palette === */
+  --color-navy-950: #060D1A;
+  --color-navy-900: #0A1628;
+  --color-navy-800: #132240;
+  --color-navy-700: #1C3358;
+  --color-navy-600: #254470;
+
+  --color-gold-600: #B8942E;
+  --color-gold-500: #C9A84C;
+  --color-gold-400: #D4B85C;
+  --color-gold-300: #DFCA7C;
+  --color-gold-200: #EBD99D;
+
+  --color-alabaster: #F5F5F5;
+  --color-pearl: #EAEAEA;
+  --color-charcoal: #0F1115;
+
+  /* === Fonts === */
+  --font-display: var(--font-playfair-display);
+  --font-body: var(--font-inter);
+
+  /* === Spacing & Sizing === */
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+
+  /* === Animations === */
+  --ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* === Base Styles === */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-navy-950);
+  color: var(--color-alabaster);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+/* === Selection === */
+::selection {
+  background-color: var(--color-gold-500);
+  color: var(--color-navy-950);
+}
+
+/* === Scrollbar === */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-navy-900);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-gold-500);
+  border-radius: 3px;
+}
+
+/* === Gold Gradient Text Utility === */
+.text-gold-gradient {
+  background: linear-gradient(135deg, var(--color-gold-400), var(--color-gold-600));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* === Glass Morphism === */
+.glass {
+  background: rgba(10, 22, 40, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(201, 168, 76, 0.12);
+}
+
+/* === Subtle Grain Texture === */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
 }

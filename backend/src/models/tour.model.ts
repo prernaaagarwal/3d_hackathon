@@ -61,7 +61,7 @@ export const tourModel = {
   async findPublicById(supabase: SupabaseClient, id: string) {
     const { data, error } = await supabase
       .from('tours')
-      .select('*, properties(address, area, images), annotations(*)')
+      .select('*, properties(address, area, images, property_type, bedrooms, bathrooms, sqft, price_aed, annual_rent_aed, service_charge_aed), annotations(*)')
       .eq('id', id)
       .eq('is_public', true)
       .single();

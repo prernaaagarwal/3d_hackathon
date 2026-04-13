@@ -72,7 +72,7 @@ export const marketService = {
 
     let query = supabaseAdmin
       .from('properties')
-      .select('id, address, area, property_type, bedrooms, bathrooms, sqft, price_aed, annual_rent_aed, images, has_3d_tour, latitude, longitude', { count: 'exact' });
+      .select('id, address, area, property_type, bedrooms, bathrooms, sqft, price_aed, annual_rent_aed, images, has_3d_tour, latitude, longitude, tours(id, status, is_public)', { count: 'exact' });
 
     if (filters.area) query = query.eq('area', filters.area);
     if (filters.propertyType) query = query.eq('property_type', filters.propertyType);
@@ -86,8 +86,16 @@ export const marketService = {
 
     if (error) throw error;
 
+    // Flatten tour_id onto each property (pick the first completed public tour)
+    const enriched = (data ?? []).map((p: Record<string, unknown>) => {
+      const tours = (p.tours as Array<{ id: string; status: string; is_public: boolean }>) ?? [];
+      const publicTour = tours.find((t) => t.status === 'complete' && t.is_public);
+      const { tours: _tours, ...rest } = p;
+      return { ...rest, tour_id: publicTour?.id ?? null };
+    });
+
     return {
-      data: data ?? [],
+      data: enriched,
       pagination: {
         page,
         limit,

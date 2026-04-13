@@ -9,7 +9,7 @@ const router = Router();
 const createTourSchema = z.object({
   property_id: z.string().uuid(),
   quality: z.enum(['standard', 'high']).optional(),
-  photo_count: z.number().int().min(10).max(50),
+  photo_count: z.number().int().min(2).max(50),
 });
 
 // GET /api/tours — List user's tours

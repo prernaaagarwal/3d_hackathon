@@ -36,7 +36,7 @@ router.get('/:tourId/status', async (req: Request, res: Response, next: NextFunc
 
       await tourService.updateStatus(req.token, tour.id, updates);
 
-      // If tour completed, mark property as having a 3D tour
+      // If tour completed, mark property as having a 3D tour and auto-publish
       if (jobResult.status === 'complete') {
         const { createUserClient } = await import('../config/supabase');
         const supabase = createUserClient(req.token);
@@ -44,6 +44,9 @@ router.get('/:tourId/status', async (req: Request, res: Response, next: NextFunc
           .from('properties')
           .update({ has_3d_tour: true, updated_at: new Date().toISOString() })
           .eq('id', tour.property_id);
+
+        // Auto-set tour as public so it appears in Prop Pulse
+        await tourService.updateStatus(req.token, tour.id, { is_public: true });
       }
     }
 
